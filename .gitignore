@@ -6,3 +6,6 @@ __pycache__/
 node_modules/
 package.json
 package-lock.json
+handouts/
+submissions/
+notes/course_digest_*
