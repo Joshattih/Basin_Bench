@@ -108,3 +108,40 @@ def load_basin(gauge_id, root="data/pilot/basin_dataset_public_v1p2", product="m
     df["pet"] = oudin_pet(df["tmean"].values, df["date"].dt.dayofyear.values, lat)
     df.attrs.update({"lat": lat, "area_m2": area_m2, "gauge_id": gauge_id})
     return df
+
+
+# ---------------------------------------------------------------------------
+# CemaNeige snow module (Valery, Andreassian, Perrin 2014), single layer.
+# Holds precipitation as snowpack when cold, releases it as melt when warm.
+# Two parameters: ctg (thermal inertia, 0-1) and kf (degree-day melt factor, mm/C/day).
+# Snow fraction of precipitation from mean temperature: all snow below -1 C, all rain above 3 C.
+# ---------------------------------------------------------------------------
+def cemaneige(P, T, ctg, kf, gthreshold=None):
+    n = len(P)
+    G = 0.0; eTG = 0.0
+    if gthreshold is None:
+        gthreshold = 0.9 * float(np.mean(P)) * 365  # standard: 90% of mean annual precipitation
+    liquid = np.empty(n); snowpack = np.empty(n)
+    for t in range(n):
+        p, temp = float(P[t]), float(T[t])
+        fsnow = 0.0 if temp >= 3 else (1.0 if temp <= -1 else (3 - temp) / 4)
+        psnow, prain = p * fsnow, p * (1 - fsnow)
+        G += psnow
+        eTG = ctg * eTG + (1 - ctg) * temp
+        pot_melt = kf * temp if (eTG >= 0 and temp > 0) else 0.0
+        pot_melt = min(G, pot_melt)
+        gratio = min(1.0, G / gthreshold) if gthreshold > 0 else 1.0
+        melt = (0.9 * gratio + 0.1) * pot_melt
+        G -= melt
+        liquid[t] = prain + melt; snowpack[t] = G
+    return liquid, snowpack
+
+
+def gr4j_snow(P, T, E, x1, x2, x3, x4, ctg, kf, return_states=False):
+    """CemaNeige feeding GR4J. Six parameters. Returns Q and optionally states incl. snowpack."""
+    liquid, snowpack = cemaneige(P, T, ctg, kf)
+    if return_states:
+        Q, st = gr4j(liquid, E, x1, x2, x3, x4, return_states=True)
+        st["snowpack_mm"] = snowpack
+        return Q, st
+    return gr4j(liquid, E, x1, x2, x3, x4)
