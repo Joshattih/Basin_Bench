@@ -1,0 +1,20 @@
+basin 01557500: calibrated in 59s
+  x1 soil bucket 465 mm | x2 exchange +0.96 mm/day | x3 slow bucket 39 mm | x4 delay 1.21 days
+  NSE train 1990-1999: 0.520
+  NSE test  2000-2008: 0.629
+  missing flow days in test: 0 of 3288
+basin 05408000: calibrated in 67s
+  x1 soil bucket 1910 mm | x2 exchange -0.79 mm/day | x3 slow bucket 34 mm | x4 delay 1.75 days
+  NSE train 1990-1999: 0.497
+  NSE test  2000-2008: 0.744
+  missing flow days in test: 0 of 3288
+basin 10348850: calibrated in 55s
+  x1 soil bucket 494 mm | x2 exchange -5.00 mm/day | x3 slow bucket 440 mm | x4 delay 1.71 days
+  NSE train 1990-1999: 0.308
+  NSE test  2000-2008: -0.858
+  missing flow days in test: 0 of 3288
+basin 06154410: calibrated in 82s
+  x1 soil bucket 274 mm | x2 exchange -1.03 mm/day | x3 slow bucket 70 mm | x4 delay 1.64 days
+  NSE train 1990-1999: 0.527
+  NSE test  2000-2008: 0.754
+  missing flow days in test: 0 of 3288
