@@ -19,7 +19,7 @@ Per-basin differences (D_b) in test NSE:
 | XGBoost minus physics | 0.00 | -0.46 | -0.09 | -0.14 | +0.10 | -0.12 | 0.21 |
 
 Findings:
-1. Snow module: on the two snow-dominated basins the physics score rose from 0.07 to 0.65 (ID) and 0.19 to 0.55 (WY); on the snow-free basin it was unchanged; on Mill Brook (22% snow) it was 0.09 lower (0.45 to 0.36). The lower score on Mill Brook is a calibration-search limitation: with the no-snow parameters and a large melt factor the snow version reaches 0.44, but the six-parameter search did not find that region. Decision 15 fixes this for the confirmatory run.
+1. Snow module: on the two snow-dominated basins the physics score rose from 0.07 to 0.65 (ID) and 0.19 to 0.55 (WY); on the snow-free basin it was unchanged; on Mill Brook (22% snow) it was 0.09 lower (0.45 to 0.36). On Mill Brook the snow version fit the training years better (train NSE 0.583 vs 0.531 no-snow) but tested worse (0.361 vs 0.447). This is a training fit that did not carry over, not a search limitation; see decision 16 (2026-10-12), which corrects decision 15.
 2. Hybrid beat XGBoost on 4 of 5 basins; hybrid beat physics on 3 of 5, by small margins (-0.03 to +0.15). Physics and hybrid are close on low-snow basins; the hybrid's gain is largest on the snow-dominated basins.
 3. NSE across arms spans 0.20 to 0.81 with the snow module; 0.07 without it. Long lower tail confirmed.
 4. Seed-to-seed sd of the learners is at most 0.025: seeds are a minor nuisance.
